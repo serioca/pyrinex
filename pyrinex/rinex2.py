@@ -60,7 +60,7 @@ def rinexnav2(fn: Path) -> xarray.Dataset:
             svs.append(f'{svtype}{int(ln[:2]):02d}')
             # format I2
             dt.append(_obstime([ln[3:5], ln[6:8], ln[9:11],
-                               ln[12:14], ln[15:17], ln[17:20], ln[17:22]]))
+                                ln[12:14], ln[15:17], ln[17:20], ln[17:22]]))
             """
             now get the data as one big long string per SV
             """
@@ -105,7 +105,8 @@ def rinexnav2(fn: Path) -> xarray.Dataset:
     return nav
 
 
-def _scan2(fn: Path, use: Any, verbose: bool=False) -> xarray.Dataset:
+def _scan2(fn: Path, use: Any,
+           verbose: bool=False) -> xarray.Dataset:
     """
      procss RINEX OBS data
     """

@@ -2,7 +2,8 @@ from pathlib import Path
 import logging
 import xarray
 from time import time
-from typing import Union
+from typing import Union, Tuple
+from datetime import datetime
 #
 from .io import opener
 from .rinex2 import rinexnav2, _scan2
@@ -12,7 +13,10 @@ from .rinex3 import rinexnav3, _scan3
 COMPLVL = 1
 
 
-def readrinex(rinexfn: Path, outfn: Path=None, use: Union[str, list, tuple]=None, verbose: bool=True) -> xarray.Dataset:
+def readrinex(rinexfn: Path, outfn: Path=None,
+              use: Union[str, list, tuple]=None,
+              tlim: Union[None, Tuple[datetime, datetime]]=None,
+              verbose: bool=True) -> xarray.Dataset:
     """
     Reads OBS, NAV in RINEX 2,3.  Plain ASCII text or GZIP .gz.
     """
@@ -78,8 +82,11 @@ def rinexnav(fn: Path, ofn: Path=None, group: str='NAV') -> xarray.Dataset:
 # %% Observation File
 
 
-def rinexobs(fn: Path, ofn: Path=None, use: Union[str, list, tuple]=None,
-             group: str='OBS', verbose: bool=False) -> xarray.Dataset:
+def rinexobs(fn: Path, ofn: Path=None,
+             use: Union[str, list, tuple]=None,
+             group: str='OBS',
+             tlim: Union[None, Tuple[datetime, datetime]]=None,
+             verbose: bool=False) -> xarray.Dataset:
     """
     Read RINEX 2,3 OBS files in ASCII or GZIP
     """

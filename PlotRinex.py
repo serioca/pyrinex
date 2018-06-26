@@ -7,7 +7,6 @@ includes how to index by satellite, measurement type and time
 from argparse import ArgumentParser
 from pathlib import Path
 import numpy as np
-from datetime import datetime
 import pyrinex as pr
 import matplotlib.dates as md
 from matplotlib.pyplot import figure, show
@@ -16,19 +15,21 @@ from matplotlib.pyplot import figure, show
 def main():
     p = ArgumentParser(description='Plot raw Rinex data')
     p.add_argument('rinexfn', help='RINEX file to analyze')
-    p.add_argument('sv',help='SVs to analyze e.g. G14 C12',nargs='+')
-    p.add_argument('-t','--tlim', help='time limits (start stop) e.g. 2017-05-25T12:47 2017-05-25T13:05', nargs=2)
-    p.add_argument('-w','--what', help='what measurements to plot e.g. L1C', nargs='+', default=['L1C','P1'])
+    p.add_argument('sv', help='SVs to analyze e.g. G14 C12', nargs='+')
+    p.add_argument('-t', '--tlim', help='time limits (start stop) e.g. 2017-05-25T12:47 2017-05-25T13:05', nargs=2)
+    p.add_argument('-w', '--what', help='what measurements to plot e.g. L1C', nargs='+', default=['L1C', 'P1'])
     P = p.parse_args()
-    
-    obs, nav = pr.readrinex(P.rinexfn, use='G')
+
+    rinexfn = Path(P.rinexfn).expanduser()
+
+    obs, nav = pr.readrinex(rinexfn, use='G')
 
 # %% optional time indexing demo
     # can use datetime or string
 
     # boolean indexing  -- set "i=slice(None)" to disable time indexing.
     if P.tlim is not None:
-        i = (obs.time >= np.datetime64(tlim[0])) & (obs.time <= np.datetime64(tlim[1]))
+        i = (obs.time >= np.datetime64(P.tlim[0])) & (obs.time <= np.datetime64(P.tlim[1]))
     else:
         i = slice(None)
 # %% plot
@@ -56,13 +57,13 @@ def main():
 
     axs[-1].set_xlabel('Time [UTC]')
     axs[-1].xaxis.set_major_formatter(md.DateFormatter('%Y-%m-%dT%H:%M'))
-    fg.suptitle(f'{fn.name}  satellite {SV}')
+    fg.suptitle(f'{rinexfn.name}  satellite {SV}')
 
 
 if __name__ == '__main__':
     main()
 
     show()
-    
+
 if __name__ == '__main__':
     main()

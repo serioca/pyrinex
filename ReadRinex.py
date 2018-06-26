@@ -16,6 +16,7 @@ from argparse import ArgumentParser
 import xarray
 import pyrinex as pr
 
+
 def main():
     p = ArgumentParser(
         description='example of reading RINEX 2/3 Navigation/Observation file')
@@ -34,12 +35,12 @@ def main():
 # %% plots
     if verbose:
         plots(nav, obs)
-        
+
 
 def plots(nav: xarray.Dataset, obs: xarray.Dataset):
     from pyrinex.plots import plotnav, plotobs
     from matplotlib.pyplot import show
-    
+
     try:
         plotnav(nav)
     except NameError:
@@ -49,10 +50,9 @@ def plots(nav: xarray.Dataset, obs: xarray.Dataset):
         plotobs(obs)
     except NameError:
         pass
-        
+
     show()
-    
+
 
 if __name__ == '__main__':
     main()
-
