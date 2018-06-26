@@ -22,10 +22,11 @@ def main():
         description='example of reading RINEX 2/3 Navigation/Observation file')
     p.add_argument('rinexfn', help='path to RINEX 2 or RINEX 3 file')
     p.add_argument('-o', '--outfn', help='write data as NetCDF4 file')
-    p.add_argument(
-        '-q', '--quiet', help='do not generate plots or print unneeded text (for HPC/cloud)', action='store_true')
-    p.add_argument(
-        '-use', help='select which GNSS system(s) to use', nargs='+')
+    p.add_argument('-q', '--quiet',
+                   help='do not generate plots or print unneeded text (for HPC/cloud)',
+                   action='store_true')
+    p.add_argument('-use', help='select which GNSS system(s) to use',
+                   nargs='+')
     P = p.parse_args()
 
     verbose = not P.quiet

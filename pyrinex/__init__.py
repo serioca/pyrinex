@@ -33,6 +33,8 @@ def readrinex(rinexfn: Path, outfn: Path=None,
         nav = rinexnav(rinexfn, outfn)
     elif fnl.endswith('o') or fnl.endswith('o.rnx'):
         obs = rinexobs(rinexfn, outfn, use=use, verbose=verbose)
+    elif fnl.endswith('.crx'):
+        raise NotImplementedError('Hatanaka compressed RINEX is not yet supported')
     elif rinexfn.suffix.endswith('.nc'):
         nav = rinexnav(rinexfn)
         obs = rinexobs(rinexfn)
@@ -103,9 +105,9 @@ def rinexobs(fn: Path, ofn: Path=None,
     tic = time()
     ver = getRinexVersion(fn)
     if int(ver) == 2:
-        obs = _scan2(fn, use, verbose)
+        obs = _scan2(fn, use, tlim=tlim, verbose=verbose)
     elif int(ver) == 3:
-        obs = _scan3(fn, use, verbose)
+        obs = _scan3(fn, use, tlim=tlim, verbose=verbose)
     else:
         raise ValueError(f'unknown RINEX verion {ver}  {fn}')
         print(f"finished in {time()-tic:.2f} seconds")

@@ -17,7 +17,8 @@ def main():
     p.add_argument('rinexfn', help='RINEX file to analyze')
     p.add_argument('sv', help='SVs to analyze e.g. G14 C12', nargs='+')
     p.add_argument('-t', '--tlim', help='time limits (start stop) e.g. 2017-05-25T12:47 2017-05-25T13:05', nargs=2)
-    p.add_argument('-w', '--what', help='what measurements to plot e.g. L1C', nargs='+', default=['L1C', 'P1'])
+    p.add_argument('-w', '--what', help='what measurements to plot e.g. L1C',
+                   nargs='+', default=['L1C', 'P1'])
     P = p.parse_args()
 
     rinexfn = Path(P.rinexfn).expanduser()

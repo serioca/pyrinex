@@ -5,7 +5,7 @@ from math import ceil
 from datetime import datetime
 from io import BytesIO
 import xarray
-from typing import Union, List, Any, Dict
+from typing import Union, List, Any, Dict, Tuple
 import logging
 #
 STARTCOL2 = 3  # column where numerical data starts for RINEX 2
@@ -106,6 +106,7 @@ def rinexnav2(fn: Path) -> xarray.Dataset:
 
 
 def _scan2(fn: Path, use: Any,
+           tlim: Union[None, Tuple[datetime, datetime]],
            verbose: bool=False) -> xarray.Dataset:
     """
      procss RINEX OBS data
@@ -167,8 +168,11 @@ def _scan2(fn: Path, use: Any,
                 print(eflag)
                 continue
 
-            time = _obstime(
-                [ln[1:3],  ln[4:6], ln[7:9],  ln[10:12], ln[13:15], ln[16:26]])
+            time = _obstime([ln[1:3],  ln[4:6], ln[7:9],  ln[10:12], ln[13:15], ln[16:26]])
+            if tlim is not None:
+                if not tlim[0] < time <= tlim[1]:
+                    continue
+
             if verbose:
                 print(time, '\r', end="")
 
