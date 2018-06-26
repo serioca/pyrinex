@@ -23,7 +23,7 @@ allows filtering/processing of gigantic files too large to fit into RAM.
 Another key advantage of PyRinex is the Xarray base class, that allows
 all the database-like indexing power of Pandas to be unleashed.
 
-PyRinex works in Python &gt;= 3.6.
+PyRinex works in Python &ge; 3.6.
 
 ![RINEX plot](tests/example_plot.png)
 
@@ -33,10 +33,10 @@ PyRinex works in Python &gt;= 3.6.
 
 ## Usage
 
-The simplest command-line use is through the top-level `ReadRinex.py` script.
+The simplest command-line use is through the top-level `ReadRinex` script.
 
--   Read RINEX3 or RINEX 2 Obs or Nav file: `python ReadRinex.py myrinex.XXx`
--   Read NetCDF converted RINEX data: `python ReadRinex.py myrinex.nc`
+-   Read RINEX3 or RINEX 2 Obs or Nav file: `ReadRinex myrinex.XXx`
+-   Read NetCDF converted RINEX data: `ReadRinex myrinex.nc`
 
 It's suggested to save the GNSS data to NetCDF4 (a subset of HDF5) with the `-o`option,
 as NetCDF4 is also human-readable, yet say 1000x faster to load than RINEX.
@@ -97,7 +97,7 @@ import pyrinex as pr
 obs = pr.rinexobs('myfile.o', use='E')
 ```
 would load only Galileo data by the parameter E.
-ReadRinex.py allow this to be specified as the -use command line parameter.
+`ReadRinex` allow this to be specified as the -use command line parameter.
 
 If however you want to do this after loading all the data anyway, you can make a Boolean indexer
 ```python

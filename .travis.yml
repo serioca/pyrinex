@@ -14,7 +14,7 @@ git:
 
 
 install:
-  - pip -q install -e .[tests]
+  - pip -q install -e .[tests,io]
 
 script: 
   - pytest -v
@@ -22,8 +22,8 @@ script:
   - mypy . --ignore-missing-imports
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.5* ]]; then
-    coverage run tests/test_all.py;
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then
+    pytest --cov;
     coveralls;
     fi
 

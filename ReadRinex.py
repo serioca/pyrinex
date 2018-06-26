@@ -12,11 +12,11 @@ Examples:
 ./ReadRinex.py ~/data/VEN100ITA_R_20181580000_01D_MN.rnx.gz
 
 """
+from argparse import ArgumentParser
+import xarray
 import pyrinex as pr
-from pyrinex.plots import plotnav, plotobs
 
-if __name__ == '__main__':
-    from argparse import ArgumentParser
+def main():
     p = ArgumentParser(
         description='example of reading RINEX 2/3 Navigation/Observation file')
     p.add_argument('rinexfn', help='path to RINEX 2 or RINEX 3 file')
@@ -33,15 +33,26 @@ if __name__ == '__main__':
 
 # %% plots
     if verbose:
-        from matplotlib.pyplot import show
-        try:
-            plotnav(nav)
-        except NameError:
-            pass
+        plots(nav, obs)
+        
 
-        try:
-            plotobs(obs)
-        except NameError:
-            pass
+def plots(nav: xarray.Dataset, obs: xarray.Dataset):
+    from pyrinex.plots import plotnav, plotobs
+    from matplotlib.pyplot import show
+    
+    try:
+        plotnav(nav)
+    except NameError:
+        pass
 
+    try:
+        plotobs(obs)
+    except NameError:
+        pass
+        
     show()
+    
+
+if __name__ == '__main__':
+    main()
+
