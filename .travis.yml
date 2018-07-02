@@ -14,7 +14,7 @@ git:
 
 
 install:
-  - pip -q install -e .[tests,io]
+  - pip install -e .[tests,io]
 
 script: 
   - pytest -v
