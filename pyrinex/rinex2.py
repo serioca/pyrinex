@@ -105,6 +105,57 @@ def rinexnav2(fn: Path) -> xarray.Dataset:
     return nav
 
 
+def _scan2Header(fn: Path, use: Any, verbose: bool=False):
+    """
+     procss RINEX OBS data
+    """
+    Lf = 14
+
+    if (not use or not use[0].strip() or
+        isinstance(use, str) and use.lower() in ('m', 'all') or
+            isinstance(use, (tuple, list, np.ndarray)) and use[0].lower() in ('m', 'all')):
+
+        use = None
+
+    with opener(fn) as f:
+        header: Dict[str, Any] = {}
+        Nobs = None
+        # Capture header info
+        for l in f:
+            if "END OF HEADER" in l:
+                break
+
+            h = l[60:80]
+            c = l[:60]
+            if '# / TYPES OF OBSERV' in h:
+                if Nobs is None:
+                    Nobs = int(c[:6])
+                    c = c[6:]
+
+            if h.strip() not in header:  # Header label
+                header[h.strip()] = c
+                # string with info
+            else:
+                header[h.strip()] += " " + c
+                # concatenate to the existing string
+# %% sanity check that MANDATORY RINEX 2 headers exist
+        for h in ('RINEX VERSION / TYPE', 'APPROX POSITION XYZ', 'INTERVAL'):
+            if h not in header:
+                raise OSError(f'Mandatory RINEX 2 headers are missing from {fn}'
+                              ' is it a valid RINEX 2 file?')
+# %% file seems OK, keep processing
+        verRinex = float(header['RINEX VERSION / TYPE'][:9])  # %9.2f
+        # list with x,y,z cartesian
+        header['APPROX POSITION XYZ'] = [
+            float(j) for j in header['APPROX POSITION XYZ'].split()]
+        # observation types
+        fields = header['# / TYPES OF OBSERV'].split()
+        assert Nobs == len(fields), 'header read incorrectly'
+
+        header['INTERVAL'] = float(header['INTERVAL'][:10])
+
+        return header
+
 def _scan2(fn: Path, use: Any, verbose: bool=False) -> xarray.Dataset:
     """
      procss RINEX OBS data
@@ -154,8 +205,6 @@ def _scan2(fn: Path, use: Any, verbose: bool=False) -> xarray.Dataset:
 
         header['INTERVAL'] = float(header['INTERVAL'][:10])
 
-        print ("ciao")
-        retunn None, None
         data: xarray.Dataset = None
 # %% process rest of file
         while True:

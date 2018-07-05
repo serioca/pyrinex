@@ -6,6 +6,7 @@ from typing import Union
 #
 from .io import opener
 from .rinex2 import rinexnav2, _scan2
+from .rinex2 import rinexnav2, _scan2Header
 from .rinex3 import rinexnav3, _scan3
 
 # for NetCDF compression. too high slows down with little space savings.
@@ -36,6 +37,10 @@ def readrinex(rinexfn: Path, outfn: Path=None, use: Union[str, list, tuple]=None
         raise ValueError(f"I dont know what type of file you're trying to read: {rinexfn}")
 
     return obs, nav
+
+def readrinex2header(rinexfn: Path, use: Union[str, list, tuple]=None, verbose: bool=True):
+    rinexfn = Path(rinexfn).expanduser()
+    return _scan2Header(rinexfn, use, verbose)
 
 
 def getRinexVersion(fn: Path) -> float:
