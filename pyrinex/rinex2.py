@@ -154,6 +154,8 @@ def _scan2(fn: Path, use: Any, verbose: bool=False) -> xarray.Dataset:
 
         header['INTERVAL'] = float(header['INTERVAL'][:10])
 
+        print ("ciao")
+        retunn None, None
         data: xarray.Dataset = None
 # %% process rest of file
         while True:
